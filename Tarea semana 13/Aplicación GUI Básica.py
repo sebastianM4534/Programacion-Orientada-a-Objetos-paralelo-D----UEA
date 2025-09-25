@@ -1,32 +1,10 @@
 #GUI BASICA
-"""
-GUI de ejemplo con Tkinter
-
-Características implementadas:
-- Ventana principal con título descriptivo.
-- Componentes: etiquetas (Label), campo de texto (Entry), botones (Agregar, Limpiar) y una tabla (ttk.Treeview) para mostrar datos.
-- Funcionalidad:
-    - "Agregar": toma texto del campo y lo añade a la tabla con un ID incremental.
-    - "Limpiar": si hay filas seleccionadas, las elimina; si no hay selección, limpia el campo de texto.
-- Eventos:
-    - Enter en el campo de texto -> agrega el elemento.
-    - Supr (Delete) cuando hay selección -> elimina elementos seleccionados.
-    - Doble clic en una fila -> carga su texto en el campo para editarlo (al agregar se guarda como nuevo registro).
-
-Decisiones de diseño (breve):
-- Uso de ttk.Treeview para mostrar los datos en formato tabular (ID + Información). Permite selección múltiple y scroll.
-- Se mantiene un contador interno para generar IDs únicos y legibles.
-- Se evitaron dependencias externas para que la aplicación funcione con Python estándar (3.7+).
-
-El código está comentado y organizado en una clase "DataGUI" para facilitar la lectura y futura extensión.
-"""
 
 import tkinter as tk
 from tkinter import ttk, messagebox
 
 
 class DataGUI(tk.Tk):
-    """Aplicación principal: ventana con controles para agregar/mostrar/limpiar datos."""
 
     def __init__(self):
         super().__init__()
@@ -45,7 +23,6 @@ class DataGUI(tk.Tk):
         self._bind_events()
 
     def _create_widgets(self):
-        """Crear todos los widgets que usará la GUI."""
 
         # Frame de entrada
 
@@ -82,7 +59,7 @@ class DataGUI(tk.Tk):
         self.status = ttk.Label(self, text="Listo", anchor="w")
 
     def _layout_widgets(self):
-        """Organizar widgets en la ventana (usamos grid para control fino)."""
+
 
         # Frame de entrada en la parte superior
 
@@ -109,7 +86,7 @@ class DataGUI(tk.Tk):
         self.status.grid(row=2, column=0, sticky="ew", pady=(8, 0))
 
     def _bind_events(self):
-        """Vincular eventos de teclado y mouse a funciones."""
+
         # Enter en el entry agrega el elemento
         self.entry_info.bind("<Return>", lambda e: self.add_item())
         # Tecla Delete elimina los elementos seleccionados
@@ -118,7 +95,7 @@ class DataGUI(tk.Tk):
         self.tree.bind("<Double-1>", lambda e: self._on_double_click(e))
 
     def add_item(self):
-        """Agregar el texto del campo entrada a la tabla con un ID incremental."""
+
         text = self.entry_info.get().strip()
         if not text:
             messagebox.showwarning("Entrada vacía", "Por favor ingresa algo antes de agregar.")
@@ -137,10 +114,7 @@ class DataGUI(tk.Tk):
         self.status.config(text=f"Agregado ID {item_id}")
 
     def clear_action(self):
-        """Si hay selección en la tabla, eliminar los elementos seleccionados.
-        Si no hay selección, limpiar el campo de entrada.
-        Esto satisface el requisito: el botón 'Limpiar' borra lo ingresado o lo seleccionado.
-        """
+
         selected = self.tree.selection()
         if selected:
             for iid in selected:
@@ -154,14 +128,11 @@ class DataGUI(tk.Tk):
                 self.status.config(text="Nada que limpiar.")
 
     def _delete_selected(self):
-        """Helper para enlazar la tecla Supr al borrado de selección."""
+
         self.clear_action()
 
     def _on_double_click(self, event):
-        """Al hacer doble clic en una fila, cargamos su texto en el Entry para poder editarlo.
-        Eliminamos la fila original; al presionar 'Agregar' se insertará como un registro "nuevo".
-        Esto es una forma sencilla de permitir edición sin crear una UI de edición completa.
-        """
+
         item = self.tree.identify_row(event.y)
         if not item:
             return
